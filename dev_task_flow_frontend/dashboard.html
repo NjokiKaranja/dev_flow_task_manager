@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4;
+      }
+      h1 {
+        text-align: center;
+      }
+      .dashboard {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+      }
+      .card {
+        width: 200px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .business-card {
+        background-color: #007bff;
+        color: white;
+      }
+      .personal-card {
+        background-color: #28a745;
+        color: white;
+      }
+      .task-form {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .task-form input,
+      .task-form select,
+      .task-form button {
+        margin: 5px;
+        padding: 10px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Task Dashboard</h1>
+    <div class="dashboard">
+      <!-- Business Tasks Card -->
+      <div class="card business-card">
+        <h2>Business</h2>
+        <p>Total Tasks: <span id="businessCount">0</span></p>
+      </div>
+
+      <!-- Personal Tasks Card -->
+      <div class="card personal-card">
+        <h2>Personal</h2>
+        <p>Total Tasks: <span id="personalCount">0</span></p>
+      </div>
+    </div>
+
+    <!-- Task Form -->
+    <div class="task-form">
+      <input type="text" id="taskName" placeholder="Task Name" />
+      <select id="taskCategory">
+        <option value="business">Business</option>
+        <option value="personal">Personal</option>
+      </select>
+      <button onclick="addTask()">Add Task</button>
+    </div>
+
+    <script>
+      // Track tasks in each category
+      let businessTasks = 0;
+      let personalTasks = 0;
+
+      // Add Task Function
+      function addTask() {
+        const taskName = document.getElementById("taskName").value.trim();
+        const taskCategory = document.getElementById("taskCategory").value;
+
+        if (!taskName) {
+          alert("Please enter a task name.");
+          return;
+        }
+
+        if (taskCategory === "business") {
+          businessTasks++;
+          document.getElementById("businessCount").innerText = businessTasks;
+        } else if (taskCategory === "personal") {
+          personalTasks++;
+          document.getElementById("personalCount").innerText = personalTasks;
+        }
+
+        // Clear the input field after adding the task
+        document.getElementById("taskName").value = "";
+      }
+    </script>
+  </body>
+</html>

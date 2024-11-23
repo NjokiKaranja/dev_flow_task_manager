@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Digital Marketing Task Manager</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .priority-low {
+        background-color: #d1fae5;
+      }
+      .priority-medium {
+        background-color: #fef3c7;
+      }
+      .priority-high {
+        background-color: #fee2e2;
+      }
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+      }
+      #successMessage,
+      #errorMessage {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 8px;
+        display: none;
+        z-index: 1100;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      #successMessage {
+        background-color: #48bb78;
+      }
+      #errorMessage {
+        background-color: #f56565;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
+        <form id="loginForm" class="space-y-4">
+          <div>
+            <label for="loginEmail" class="text-md">Email</label>
+            <input
+              type="email"
+              id="loginEmail"
+              placeholder="Email"
+              required
+              class="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div>
+            <label for="loginPassword" class="text-md">Password</label>
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Password"
+              required
+              class="w-full p-2 border rounded"
+            />
+            <!-- <label for="rememberMe" class="text-sm">Remember Me</label>
+            <input type="checkbox" id="rememberMe" class="form-checkbox ml-3" /> -->
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+            id="loginButton"
+          >
+            Login
+          </button>
+          <p class="text-center">
+            Don't have an account?
+            <a href="#" id="signupLink" class="text-blue-500">Sign Up</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Signup Page -->
+    <div
+      id="signupPage"
+      class="min-h-screen flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold text-center mb-6">Sign Up</h2>
+        <form id="signupForm" class="space-y-4">
+          <input
+            type="text"
+            id="signupName"
+            placeholder="Full Name"
+            required
+            class="w-full p-2 border rounded"
+          />
+          <input
+            type="email"
+            id="signupEmail"
+            placeholder="Email"
+            required
+            class="w-full p-2 border rounded"
+          />
+          <input
+            type="password"
+            id="signupPassword"
+            placeholder="Password"
+            required
+            class="w-full p-2 border rounded"
+          />
+          <button
+            type="submit"
+            class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
+          >
+            Create Account
+          </button>
+          <p class="text-center">
+            Already have an account?
+            <a href="#" id="loginLink" class="text-blue-500">Login</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Task Manager Page -->
+    <div id="taskManagerPage" class="hidden">
+      <div class="container mx-auto max-w-4xl p-8">
+        <div class="flex justify-between items-center mb-4">
+          <h1 class="text-3xl font-bold text-blue-600">
+            Digital Marketing Task Manager
+          </h1>
+          <button
+            id="logoutButton"
+            class="bg-red-500 text-white px-4 py-2 rounded"
+          >
+            Logout
+          </button>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-lg p-6">
+          <!-- Rest of the existing task manager HTML -->
+          <form id="taskForm" class="mb-6">
+            <!-- Form remains the same as previous implementation -->
+          </form>
+
+          <div id="taskList" class="space-y-4">
+            <!-- Tasks will be dynamically added here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="successMessage" class="text-center">
+      Task completed successfully! 🎉
+    </div>
+    <div id="errorMessage" class="text-center"></div>
+
+    <script src="/dev_task_flow_frontend/auth.js" type="module"></script>
+
+    <!-- <script>
+      class TaskManagerApp {
+        constructor() {
+          this.users = JSON.parse(localStorage.getItem("marketingUsers")) || [];
+          this.currentUser = null;
+          this.tasks = [];
+
+          // Page Elements
+          this.loginPage = document.getElementById("loginPage");
+          this.signupPage = document.getElementById("signupPage");
+          this.taskManagerPage = document.getElementById("taskManagerPage");
+
+          // Forms
+          this.loginForm = document.getElementById("loginForm");
+          this.signupForm = document.getElementById("signupForm");
+          this.taskForm = document.getElementById("taskForm");
+
+          // Navigation Links
+          this.signupLink = document.getElementById("signupLink");
+          this.loginLink = document.getElementById("loginLink");
+
+          // Logout Button
+          this.logoutButton = document.getElementById("logoutButton");
+
+          // Messages
+          this.successMessage = document.getElementById("successMessage");
+          this.errorMessage = document.getElementById("errorMessage");
+
+          this.initEventListeners();
+          this.checkAuthStatus();
+        }
+
+        initEventListeners() {
+          // Signup Link
+          this.signupLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.loginPage.classList.add("hidden");
+            this.signupPage.classList.remove("hidden");
+          });
+
+          // Login Link
+          this.loginLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.signupPage.classList.add("hidden");
+            this.loginPage.classList.remove("hidden");
+          });
+
+          // Signup Form
+          this.signupForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            this.signup();
+          });
+
+          // Login Form
+          this.loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            this.login();
+          });
+
+          // Logout Button
+          this.logoutButton.addEventListener("click", () => {
+            this.logout();
+          });
+
+          // Task Form (similar to your previous implementation)
+          this.taskForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const editTaskId = document.getElementById("editTaskId").value;
+
+            if (editTaskId) {
+              this.updateTask(parseInt(editTaskId));
+            } else {
+              this.addTask();
+            }
+          });
+        }
+
+        checkAuthStatus() {
+          const loggedInUser = localStorage.getItem("currentUser");
+          if (loggedInUser) {
+            this.currentUser = JSON.parse(loggedInUser);
+            this.loadUserTasks();
+            this.showTaskManagerPage();
+            window.location.href = "/dev_task_flow_frontend/index.html";
+          }
+        }
+
+        signup() {
+          const name = document.getElementById("signupName").value;
+          const email = document.getElementById("signupEmail").value;
+          const password = document.getElementById("signupPassword").value;
+
+          // Basic validation
+          if (this.users.some((user) => user.email === email)) {
+            this.showErrorMessage("Email already exists");
+            return;
+          }
+
+          const newUser = { id: Date.now(), name, email, password };
+          this.users.push(newUser);
+          localStorage.setItem("marketingUsers", JSON.stringify(this.users));
+
+          this.currentUser = newUser;
+          localStorage.setItem("currentUser", JSON.stringify(newUser));
+
+          this.showTaskManagerPage();
+          this.signupForm.reset();
+        }
+
+        login() {
+          const email = document.getElementById("loginEmail").value;
+          const password = document.getElementById("loginPassword").value;
+
+          const user = this.users.find(
+            (u) => u.email === email && u.password === password
+          );
+
+          if (user) {
+            this.currentUser = user;
+            localStorage.setItem("currentUser", JSON.stringify(user));
+            this.loadUserTasks();
+            this.showTaskManagerPage();
+          } else {
+            this.showErrorMessage("Invalid email or password");
+          }
+        }
+
+        logout() {
+          localStorage.removeItem("currentUser");
+          this.currentUser = null;
+          this.tasks = [];
+          this.loginPage.classList.remove("hidden");
+          this.taskManagerPage.classList.add("hidden");
+        }
+
+        loadUserTasks() {
+          const userTasks =
+            JSON.parse(localStorage.getItem(`tasks_${this.currentUser.id}`)) ||
+            [];
+          this.tasks = userTasks;
+          this.renderTasks();
+        }
+
+        addTask() {
+          const task = {
+            id: Date.now(),
+            userId: this.currentUser.id,
+            title: document.getElementById("taskTitle").value,
+            team: document.getElementById("taskTeam").value,
+            priority: document.getElementById("taskPriority").value,
+            dueDate: document.getElementById("taskDueDate").value,
+            description: document.getElementById("taskDescription").value,
+            status: "pending",
+          };
+
+          this.tasks.push(task);
+          this.saveTasks();
+          this.renderTasks();
+          this.taskForm.reset();
+        }
+
+        renderTasks() {
+          const taskList = document.getElementById("taskList");
+          taskList.innerHTML = this.tasks
+            .map(
+              (task) => `
+                    <div class="task border rounded p-4 priority-${task.priority}">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-lg">${task.title}</h3>
+                            <span class="text-sm text-gray-600 uppercase">${task.team}</span>
+                        </div>
+                        <p class="text-sm mb-2">${task.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Due: ${task.dueDate}</span>
+                            <div>
+                                <button onclick="app.completeTask(${task.id})" 
+                                    class="bg-green-500 text-white px-2 py-1 rounded">
+                                    Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `
+            )
+            .join("");
+        }
+
+        completeTask(id) {
+          const taskIndex = this.tasks.findIndex((task) => task.id === id);
+          if (taskIndex !== -1) {
+            this.tasks.splice(taskIndex, 1);
+            this.saveTasks();
+            this.renderTasks();
+            this.showSuccessMessage();
+          }
+        }
+
+        saveTasks() {
+          localStorage.setItem(
+            `tasks_${this.currentUser.id}`,
+            JSON.stringify(this.tasks)
+          );
+        }
+
+        showTaskManagerPage() {
+          this.loginPage.classList.add("hidden");
+          this.signupPage.classList.add("hidden");
+          this.taskManagerPage.classList.remove("hidden");
+        }
+
+        showSuccessMessage() {
+          this.successMessage.style.display = "block";
+          setTimeout(() => {
+            this.successMessage.style.display = "none";
+          }, 3000);
+        }
+
+        showErrorMessage(message) {
+          this.errorMessage.textContent = message;
+          this.errorMessage.style.display = "block";
+          setTimeout(() => {
+            this.errorMessage.style.display = "none";
+          }, 3000);
+        }
+      }
+
+      const app = new TaskManagerApp();
+    </script> -->
+  </body>
+</html>
