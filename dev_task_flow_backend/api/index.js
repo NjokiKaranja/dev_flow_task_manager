@@ -191,7 +191,6 @@ app.post(
         id,
       ]);
 
-
       // Check if user is allowed to confirm this task
       if (rows[0].assigned_to !== req.user.id) {
         return res
@@ -222,6 +221,16 @@ app.delete(`/api/tasks/:id`, authenticateToken, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// Logout
+
+app.post("/api/logout", authenticateToken, async (req, res) => {
+  const authHeader = req.headers['cookie'];
+
+  console.log(authHeader);
+  res.clearCookie("token");
+  res.json({ status: { message: "Logged out successfully", code: 200 } });
 });
 
 const PORT = process.env.PORT || 3000;

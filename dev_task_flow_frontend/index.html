@@ -13,7 +13,7 @@
       }
 
       .container {
-        max-width: 800px;
+        max-width: 90%;
         margin: 0 auto;
         background-color: #16213e;
         border-radius: 10px;
@@ -21,8 +21,66 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
 
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .title-container {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+      }
+
+      .title-container img {
+        border-radius: 180px;
+        margin-right: 20px;
+      }
+
+      .logout-container img {
+        width: 44px;
+        cursor: pointer;
+        border-radius: 180px;
+      }
+
+      .logout-card {
+        position: absolute;
+        top: 90px; /* Ensure `px` is specified */
+        right: 0;
+        left: auto;
+        padding: 10px;
+        background-color: #16213e;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        width: fit-content;
+        margin-right: 20px;
+
+        /* Initial state (hidden) */
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+
+        /* Smooth transitions */
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .logout-card.show {
+        opacity: 1;
+        transform: translateY(10px);
+        pointer-events: auto;
+      }
+
+      .logout-btn {
+        cursor: pointer;
+        border-radius: 15px;padding: 5px;
+      }
+
       h1 {
-        text-align: center;
+        text-align: left;
         color: #14ffec;
         margin-bottom: 20px;
       }
@@ -120,7 +178,29 @@
   </head>
   <body>
     <div class="container">
-      <h1>DevTaskFlow: Developer Task Management</h1>
+      <div class="header-container">
+        <div class="title-container">
+          <img
+            src="https://i.pinimg.com/736x/f8/98/bf/f898bfb34a80f0784e1417c86a096e13.jpg"
+            alt=""
+            ;
+            srcset=""
+            width="50px"
+            height="50px"
+          />
+          <h1>DevTaskFlow: Developer Task Management</h1>
+        </div>
+
+        <div class="logout-container">
+          <img
+            id="profilePictureAvatar"
+            src="data:image/jpeg;base64,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"
+            alt="Profile Picture"
+          />
+
+          <div class="logout-card" id="logoutCard"></div>
+        </div>
+      </div>
 
       <div class="task-input">
         <form id="addTaskForm">
@@ -174,143 +254,6 @@
       </div>
     </div>
 
-    <!-- <script>
-        class TaskManager {
-            constructor() {
-                this.tasks = JSON.parse(localStorage.getItem('devTasks')) || [];
-                this.renderTasks();
-            }
-
-            addTask(description, priority, category) {
-                const task = {
-                    id: Date.now(),
-                    description,
-                    priority,
-                    category,
-                    completed: false,
-                    createdAt: new Date().toISOString().split('T')[0]
-                };
-                this.tasks.push(task);
-                this.saveTasks();
-                this.renderTasks();
-            }
-
-            deleteTask(taskId) {
-                const confirmed = confirm('Are you sure you want to delete this task?');
-                if (confirmed) {
-                    this.tasks = this.tasks.filter(task => task.id !== taskId);
-                    this.saveTasks();
-                    this.renderTasks();
-                }
-            }
-
-            editTask(taskId, newDescription, newPriority, newCategory) {
-                const taskIndex = this.tasks.findIndex(task => task.id === taskId);
-                if (taskIndex !== -1) {
-                    this.tasks[taskIndex].description = newDescription;
-                    this.tasks[taskIndex].priority = newPriority;
-                    this.tasks[taskIndex].category = newCategory;
-                    this.saveTasks();
-                    this.renderTasks();
-                    alert('Task updated successfully!');
-                }
-            }
-
-            toggleTaskCompletion(taskId) {
-                const task = this.tasks.find(task => task.id === taskId);
-                if (task) {
-                    task.completed = !task.completed;
-                    this.saveTasks();
-                    this.renderTasks();
-                }
-            }
-
-            saveTasks() {
-                localStorage.setItem('devTasks', JSON.stringify(this.tasks));
-            }
-
-            renderTasks() {
-                const taskList = document.getElementById('taskList');
-                taskList.innerHTML = '';
-
-                const sortedTasks = this.tasks.sort((a, b) => {
-                    const priorityOrder = { high: 3, medium: 2, low: 1 };
-                    if (a.completed !== b.completed) {
-                        return a.completed ? 1 : -1;
-                    }
-                    return priorityOrder[b.priority] - priorityOrder[a.priority];
-                });
-
-                sortedTasks.forEach(task => {
-                    const li = document.createElement('li');
-                    li.className = `task-item task-priority-${task.priority} ${task.completed ? 'task-completed' : ''}`;
-                    
-                    li.innerHTML = `
-                        <div>
-                            ${task.description}
-                            <small> | ${task.category} | ${task.priority} | ${task.createdAt}</small>
-                        </div>
-                        <div class="task-actions">
-                            <button onclick="taskManager.toggleTaskCompletion(${task.id})">
-                                ${task.completed ? 'Undo' : 'Complete'}
-                            </button>
-                            <button onclick="openEditModal(${task.id}, '${task.description}', '${task.priority}', '${task.category}')">Edit</button>
-                            <button onclick="taskManager.deleteTask(${task.id})">Delete</button>
-                        </div>
-                    `;
-                    
-                    taskList.appendChild(li);
-                });
-            }
-        }
-
-        const taskManager = new TaskManager();
-
-        function addTask() {
-            const taskInput = document.getElementById('taskInput');
-            const prioritySelect = document.getElementById('prioritySelect');
-            const categorySelect = document.getElementById('categorySelect');
-
-            if (taskInput.value.trim()) {
-                taskManager.addTask(
-                    taskInput.value, 
-                    prioritySelect.value, 
-                    categorySelect.value
-                );
-                taskInput.value = '';
-            }
-        }
-
-        function openEditModal(taskId, description, priority, category) {
-            const editModal = document.getElementById('editModal');
-            const descriptionInput = document.getElementById('editTaskDescription');
-            const prioritySelect = document.getElementById('editPrioritySelect');
-            const categorySelect = document.getElementById('editCategorySelect');
-
-            descriptionInput.value = description;
-            prioritySelect.value = priority;
-            categorySelect.value = category;
-
-            editModal.setAttribute('data-task-id', taskId);
-            editModal.style.display = 'flex';
-        }
-
-        function closeEditModal() {
-            const editModal = document.getElementById('editModal');
-            editModal.style.display = 'none';
-        }
-
-        function saveEditedTask() {
-            const editModal = document.getElementById('editModal');
-            const taskId = parseInt(editModal.getAttribute('data-task-id'));
-            const description = document.getElementById('editTaskDescription').value;
-            const priority = document.getElementById('editPrioritySelect').value;
-            const category = document.getElementById('editCategorySelect').value;
-
-            taskManager.editTask(taskId, description, priority, category);
-            closeEditModal();
-        }
-    </script> -->
     <script src="/dev_task_flow_frontend/index.js" type="module"></script>
   </body>
 </html>

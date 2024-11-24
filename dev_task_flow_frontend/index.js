@@ -1,6 +1,8 @@
 // validate the input and post to the api endpoints
 const baseUrl = "http://localhost:3000/api";
 const accessToken = localStorage.getItem("accessToken");
+const employee = JSON.parse(localStorage.getItem("employee"));
+let showLogoutCard = false;
 
 if (!accessToken) {
   // alert("Please login to access the tasks");
@@ -21,12 +23,40 @@ function fetchTasks() {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       tasks = data;
       const taskList = document.getElementById("taskList");
       taskList.innerHTML = "";
       renderTaskList(tasks);
+
+      const profilePictureAvatar = document.getElementById(
+        "profilePictureAvatar"
+      );
+      profilePictureAvatar.addEventListener("click", () => {
+        displayLogoutCard();
+      });
     });
+}
+
+function displayLogoutCard() {
+  showLogoutCard = !showLogoutCard;
+
+  const profileCard = document.getElementById("logoutCard");
+  if (!showLogoutCard) {
+    profileCard.classList.remove("show");
+  } else {
+    document.getElementById("logoutCard").classList.add("show");
+  }
+  profileCard.innerHTML = `
+        <div>
+            <h5>${employee.email}</h5>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+      `;
+
+  const logoutBtn = document.getElementById("logout-btn");
+  logoutBtn.addEventListener(`click`, function (e) {
+    logout();
+  });
 }
 
 function renderTaskList(tasks) {
@@ -170,7 +200,28 @@ function changeTaskStatus(task_id, statusName) {
 }
 
 // logout
-function logout() {}
+function logout() {
+  // make a request to the backend to log out
+  fetch(`${baseUrl}/logout`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: null,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status.code === 200) {
+        alert(data.status.message);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("employee");
+        window.location.href = "/dev_task_flow_frontend/login.html";
+      } else {
+        alert(data.status.message);
+      }
+    });
+}
 
 function resetForm() {
   document.getElementById("title").value = "";
